@@ -28,30 +28,31 @@ public class Cave {
     GameMap caveMap = new GameMap(map, "map");
 
 
-    public void enterCave() {
-        if (!isinCave == false) {
-            System.out.println("how did you even get this error");
 
-        } else {
-            isinCave = true;
-            System.out.println("You went into the Cave.");
-        }
-    }
-    public void exitCave() {
-
-        if (!isinCave == true) {
-            System.out.println("how did you even get this error");
-        } else {
-            isinCave = false;
-            System.out.println("The sun is too bright! but hey atleast you left the cave.");
-        }
-    }
     public void checkInCave() {
-        if (isinCave = true) {
-            System.out.println("volgens programma in de cave");
+        if (isinCave == true) {
+            System.out.println("You are in the cave according to the program.");
         } else {
-            System.out.println("volgens programma buiten de cave");
+            System.out.println("You are outside the cave according to the program.");
         }
-
     }
+
+    public void enterCave() {
+        if (!isinCave) {
+            isinCave = true;
+            System.out.println("You went into the cave.");
+        } else {
+            System.out.println("You're already in the cave!");
+        }
+    }
+
+    public void exitCave() {
+        if (isinCave) {
+            isinCave = false;
+            System.out.println("You left the cave.");
+        } else {
+            System.out.println("You're not in the cave!");
+        }
+    }
+
 }

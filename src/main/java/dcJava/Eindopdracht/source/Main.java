@@ -144,7 +144,7 @@ public class Main {
             } else if (input.equalsIgnoreCase("restart")) {
                 restartGame();
             } else {
-                System.out.println(huh);
+                handleMovement(input);
             }
         } else if (map[playerRow][playerCol] == CAVE) {
             if (input.equalsIgnoreCase("yes")) {
@@ -266,11 +266,7 @@ public class Main {
                 print.help();
                 break;
             case "m":
-                if (cave.isinCave == false) {
-                print.printMap(gameMap);
-                } else {
-                    print.printMap(cave.caveMap);
-                }
+                decideMap();
                 break;
             case "inv":
                 print.inventoryPrint(inventory);
@@ -278,17 +274,14 @@ public class Main {
             case "restart":
                 System.out.println("Restarting game...");
                 restartGame();
-            case "cavemapc":
+            case "cavemap":
                 print.printMap(cave.caveMap);
 
             default:
                 System.out.println("What do you mean?");
                 break;
         }
-
-
     }
-
 //essential stuff
     public void incaseError() {
         if (playerRow > 0) {
@@ -309,20 +302,11 @@ public class Main {
         System.out.println("restarting game...");
 
     }
-
-    public void decideMap(){
-        if (cave.isinCave = true) {
-           cave.caveMap.print(playerRow, playerCol);
+    public void decideMap() {
+        if (cave.isinCave) {
+            cave.caveMap.print(playerRow, playerCol);
         } else {
             gameMap.print(playerRow, playerCol);
         }
     }
-
-
-
-
-
-
-
-
 }

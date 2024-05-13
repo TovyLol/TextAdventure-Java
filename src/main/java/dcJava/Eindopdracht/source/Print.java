@@ -43,17 +43,22 @@ public class Print {
 
 
     public void printMap(GameMap gameMap) {
-            System.out.println(gameMap.getName() + " Map:");
-            for (int i = 0; i < gameMap.getHeight(); i++) {
-                for (int j = 0; j < gameMap.getWidth(); j++) {
-                    if (i == main.playerRow && j == main.playerCol) {
-                        System.out.print("X ");
+        System.out.println(gameMap.getName() + " Map:");
+        for (int i = 0; i < gameMap.getHeight(); i++) {
+            for (int j = 0; j < gameMap.getWidth(); j++) {
+                if (i == main.playerRow && j == main.playerCol) {
+                    System.out.print("X ");
+                } else {
+                    if (i < gameMap.getHeight() && j < gameMap.getWidth()) {
+                        System.out.print(gameMap.getMap()[i][j] + " ");
                     } else {
-                        System.out.print(main.map[i][j] + " ");
+                        System.out.print("Out ");
                     }
                 }
-                System.out.println();
             }
+            System.out.println();
+        }
     }
+
 
 }

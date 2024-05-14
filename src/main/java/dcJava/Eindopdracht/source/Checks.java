@@ -53,4 +53,14 @@ public class Checks {
             return false;
         }
     }
+    public void handleBoatAndCrafter() {
+        if (checkWood()) {
+            main.inventory.put("Boat", "Boat");
+            System.out.println("You got a boat.");
+            main.playerRow++;
+        } else {
+            System.out.println("You do not have the required items to use this.");
+            main.incaseError();
+        }
+    }
 }

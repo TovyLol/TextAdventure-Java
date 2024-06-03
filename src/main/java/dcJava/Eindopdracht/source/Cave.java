@@ -29,14 +29,6 @@ public class Cave {
 
 
 
-    public void checkInCave() {
-        if (isinCave == true) {
-            System.out.println("You are in the cave according to the program.");
-        } else {
-            System.out.println("You are outside the cave according to the program.");
-        }
-    }
-
     public void enterCave() {
         if (!isinCave) {
             isinCave = true;
@@ -54,5 +46,4 @@ public class Cave {
             System.out.println("You're not in the cave!");
         }
     }
-
 }

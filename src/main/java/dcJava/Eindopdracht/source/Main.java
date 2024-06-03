@@ -1,6 +1,8 @@
 package dcJava.Eindopdracht.source;
+
 import java.util.HashMap;
 import java.util.Scanner;
+
 public class Main {
     final static int WATER = 1, GRASS = 2, ROCK = 3, TREE = 4, CHEST = 5, CAVE = 6, CRAFTER = 12;
     int[][] map = {
@@ -18,166 +20,196 @@ public class Main {
     Cave cave;
     Checks checks;
     Print print;
+
     public Main() {
         this.cave = new Cave(this, checks);
         this.checks = new Checks(this, this.cave, this.print);
         this.print = new Print(this, this.cave);
     }
-    public static void main(String args[]) {
+
+    public static void main(String[] args) {
         Main ta = new Main();
         ta.init();
         ta.mainLoop();
     }
+
     public void init() {
         System.out.println("Welcome to the game.");
+        System.out.println("\n" +
+                "████████╗███████╗██╗░░██╗████████╗  ░█████╗░██████╗░██╗░░░██╗███████╗███╗░░██╗████████╗██╗░░░██╗██████╗░███████╗\n" +
+                "╚══██╔══╝██╔════╝╚██╗██╔╝╚══██╔══╝  ██╔══██╗██╔══██╗██║░░░██║██╔════╝████╗░██║╚══██╔══╝██║░░░██║██╔══██╗██╔════╝\n" +
+                "░░░██║░░░█████╗░░░╚███╔╝░░░░██║░░░  ███████║██║░░██║╚██╗░██╔╝█████╗░░██╔██╗██║░░░██║░░░██║░░░██║██████╔╝█████╗░░\n" +
+                "░░░██║░░░██╔══╝░░░██╔██╗░░░░██║░░░  ██╔══██║██║░░██║░╚████╔╝░██╔══╝░░██║╚████║░░░██║░░░██║░░░██║██╔══██╗██╔══╝░░\n" +
+                "░░░██║░░░███████╗██╔╝╚██╗░░░██║░░░  ██║░░██║██████╔╝░░╚██╔╝░░███████╗██║░╚███║░░░██║░░░╚██████╔╝██║░░██║███████╗\n" +
+                "░░░╚═╝░░░╚══════╝╚═╝░░╚═╝░░░╚═╝░░░  ╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚══╝░░░╚═╝░░░░╚═════╝░╚═╝░░╚═╝╚══════╝");
+        System.out.println("When youre ready put in a command");
+        print.help();
         playerRow = gameMap.getHeight() - 1;
         playerCol = gameMap.getWidth() / 2;
     }
+
     public void mainLoop() {
         Scanner scanner = new Scanner(System.in);
         String input = "";
         while (!input.equals("stop")) {
-            describeRoom(input);
             System.out.println(">");
             input = scanner.nextLine();
             executeInput(input);
-            cave.checkInCave();
+
         }
+        scanner.close();
     }
-    public void describeRoom(String input) {
+
+    public void describeRoom() {
         String reply = "You are ";
         if (!cave.isinCave) {
-            switch (map[playerRow][playerCol]) {
-                case GRASS:
-                    reply += "in the grass, ew so many bugs!!";
-                    break;
-                case ROCK:
-                    reply += "on a rock.";
-                    break;
-                case TREE:
-                    reply += "in front of a tree, do you wanna interact? YES/NO";
-                    break;
-                case CHEST:
-                    reply += "in front of a chest. Do you want to open it? YES/NO";
-                    break;
-                case CAVE:
-                    reply += "in front of a massive cave! Do you want to enter? YES/NO";
-                    break;
-                case WATER:
-                    reply += "on water";
-                    if (input.equals("Boat") || input.equals("Crafter")) {
-                        checks.handleBoatAndCrafter();
-                    } else {
-                        handleMovement(input);
-                    }
-                    break;
-                case CRAFTER:
-                    reply += "at the crafter";
-                    if (input.equals("Boat") || input.equals("Crafter")) {
-                        checks.handleBoatAndCrafter();
-                    } else {
-                        handleMovement(input);
-                    }
-                    break;
+            int currentTile = map[playerRow][playerCol];
+            if (currentTile == GRASS) {
+                reply += "in the grass, ew so many bugs!!";
+            } else if (currentTile == ROCK) {
+                reply += "on a rock.";
+            } else if (currentTile == TREE) {
+                reply += "in front of a tree, do you wanna interact? YES/NO";
+            } else if (currentTile == CHEST) {
+                reply += "in front of a chest. Do you want to open it? YES/NO";
+            } else if (currentTile == CAVE) {
+                reply += "in front of a massive cave! Do you want to enter? YES/NO";
+            } else if (currentTile == WATER) {
+                reply += "on water";
+            } else if (currentTile == CRAFTER) {
+                System.out.println("Welcome to the Crafter");
+                System.out.println("You may craft items here!");
+                System.out.println("A full list of items will be listed below!");
+                print.printCraftItems();
             }
         } else {
-            if (cave.caveMap.getMap()[playerRow][playerCol] == cave.EXIT) {
+            int caveTile = cave.caveMap.getMap()[playerRow][playerCol];
+            if (caveTile == cave.EXIT) {
                 reply = reply + "in front of the exit of the cave, but do you want to exit? YES/NO";
-            } else if (cave.caveMap.getMap()[playerRow][playerCol] == cave.WALL) {
+            } else if (caveTile == cave.WALL) {
                 reply = reply + "in front of a steep wall, you may want to turn around.";
-            } else if (cave.caveMap.getMap()[playerRow][playerCol] == cave.RESOURCE) {
+            } else if (caveTile == cave.RESOURCE) {
                 reply = reply + "looking at a valuable resource but what is it? Mine it to find out! YES/NO";
-            } else if (cave.caveMap.getMap()[playerRow][playerCol] == cave.PIT) {
+            } else if (caveTile == cave.PIT) {
                 System.out.println("You fell in the pit and died :(");
                 restartGame();
-            } else if (cave.caveMap.getMap()[playerRow][playerCol] == cave.HALLWAY) {
+            } else if (caveTile == cave.HALLWAY) {
                 reply = reply + "in a hallway, might wanna keep walking forward.";
             }
         }
         System.out.println(BORDER);
         System.out.println(reply);
     }
+
     public void executeInput(String input) {
+        int currentTile = map[playerRow][playerCol];
         if (input.equalsIgnoreCase("yes")) {
-            switch (map[playerRow][playerCol]) {
-                case CHEST:
-                    System.out.println("Chest opened!");
-                    inventory.put("Pickaxe", "Pickaxe");
-                    inventory.put("Axe", "Axe");
-                    print.inventoryPrint(inventory);
-                    break;
-                case CAVE:
-                    if (checks.checkTools()) {
-                        cave.enterCave();
-                    } else {
-                        System.out.println("You forgot to bring your trusty pickaxe!");
-                        incaseError();
-                    }
-                    break;
-                case TREE:
-                    if (checks.checkTools()) {
-                        inventory.put("Wood", "Wood");
-                        System.out.println("You violently cut down that tree, and now you have wood!");
-                        incaseError();
-                    } else {
-                        System.out.println("You do not have the required items to use this.");
-                    }
-                    break;
+            if (currentTile == CHEST) {
+                System.out.println("Chest opened!");
+                inventory.put("Pickaxe", "Pickaxe");
+                inventory.put("Axe", "Axe");
+                print.inventoryPrint(inventory);
+            } else if (currentTile == CAVE) {
+                if (checks.checkTools()) {
+                    cave.enterCave();
+                } else {
+                    System.out.println("You forgot to bring your trusty pickaxe!");
+                    incaseError();
+                }
+            } else if (currentTile == TREE) {
+                if (checks.checkTools()) {
+                    inventory.put("Wood", "Wood");
+                    System.out.println("You violently cut down that tree, and now you have wood!");
+                    incaseError();
+                } else {
+                    System.out.println("You do not have the required items to use this.");
+                }
+            } else if (cave.caveMap.getMap()[playerRow][playerCol] == cave.RESOURCE) {
+                System.out.println("You mined the resource and found something valuable!");
+                endGame();
+            }else {
+                System.out.println("This does not comply to your current situation");
             }
         } else if (input.equalsIgnoreCase("no")) {
-            if (map[playerRow][playerCol] == CHEST) {
+            if (currentTile == CHEST) {
                 System.out.println("You left the chest behind.");
                 incaseError();
-            } else if (map[playerRow][playerCol] == CAVE) {
+            } else if (currentTile == CAVE) {
                 System.out.println("You turned around not looking back.");
                 incaseError();
-            } else if (map[playerRow][playerCol] == cave.RESOURCE) {
+            } else if (cave.caveMap.getMap()[playerRow][playerCol] == cave.RESOURCE) {
                 incaseError();
-            } else if (map[playerRow][playerCol] == TREE) {
+            } else if (currentTile == TREE) {
                 incaseError();
-            } else if (map[playerRow][playerCol] == cave.EXIT) {
+            } else if (cave.caveMap.getMap()[playerRow][playerCol] == cave.EXIT) {
                 cave.exitCave();
             }
-        } else {
+        } else if  (currentTile == CRAFTER) {
+            if (input.equalsIgnoreCase("boat")) {
+                handleBoatAndCrafter();
+            } else {
+                System.out.println("You do not have the required items GET OUT!");
+                handleMovement(input);
+            }
+        }else {
             handleMovement(input);
         }
     }
+
     public void handleMovement(String input) {
+        int newRow = playerRow;
+        int newCol = playerCol;
+
         switch (input) {
             case "n":
-                playerRow = (playerRow > 0) ? playerRow - 1 : playerRow;
-                if (playerRow == playerRow)
-                    playerCol--;
+                if (playerRow > 0) {
+                    newRow--;
+                }
                 break;
             case "s":
-                playerRow = (playerRow < gameMap.getHeight() - 1) ? playerRow + 1 : playerRow;
+                if (playerRow < gameMap.getHeight() - 1) {
+                    newRow++;
+                }
                 break;
             case "e":
-                playerCol = (playerCol < gameMap.getWidth() - 1) ? playerCol + 1 : playerCol;
+                if (playerCol < gameMap.getWidth() - 1) {
+                    newCol++;
+                }
                 break;
             case "w":
-                playerCol = (playerCol > 0) ? playerCol - 1 : playerCol;
+                if (playerCol > 0) {
+                    newCol--;
+                }
                 break;
             case "h":
                 print.help();
-                break;
+                return;
             case "m":
                 decideMap();
-                break;
+                return;
             case "inv":
                 print.inventoryPrint(inventory);
-                break;
+                return;
             case "restart":
                 restartGame();
-                break;
+                return;
             case "cavemap":
                 print.printMap(cave.caveMap);
-                break;
+                return;
             default:
                 System.out.println("What do you mean?");
-                break;
+                return;
+        }
+
+        if (map[newRow][newCol] == WATER && !inventory.containsKey("Boat")) {
+            System.out.println("You cannot move onto the water without a boat!");
+        } else {
+            playerRow = newRow;
+            playerCol = newCol;
+            describeRoom();
         }
     }
+
     public void handleBoatAndCrafter() {
         if (checks.checkWood()) {
             inventory.put("Boat", "Boat");
@@ -188,6 +220,7 @@ public class Main {
             incaseError();
         }
     }
+
     public void incaseError() {
         if (playerRow > 0) {
             playerRow--;
@@ -199,6 +232,7 @@ public class Main {
             decideMap();
         }
     }
+
     public void restartGame() {
         inventory.clear();
         playerRow = gameMap.getHeight() - 1;
@@ -206,11 +240,17 @@ public class Main {
         cave.isinCave = false;
         System.out.println("Restarting game...");
     }
+
     public void decideMap() {
         if (cave.isinCave) {
             cave.caveMap.print(playerRow, playerCol);
         } else {
             gameMap.print(playerRow, playerCol);
         }
+    }
+
+    public void endGame() {
+        System.out.println("Congratulations! You've found a valuable resource and won the game!");
+        System.exit(0);
     }
 }

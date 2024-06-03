@@ -31,28 +31,17 @@ public class Checks {
     }
 
     public boolean checkBoat() {
-        if (main.inventory.containsKey("Boat")) {
-            return true;
-        } else {
-            return false;
-        }
+        return main.inventory.containsKey("Boat");
     }
 
     public boolean checkTools() {
-        if (main.inventory.containsKey("Axe")) {
-            return true;
-        } else {
-            return false;
-        }
+        return main.inventory.containsKey("Axe");
     }
 
     public boolean checkWood() {
-        if (main.inventory.containsKey("Wood")) {
-            return true;
-        } else {
-            return false;
-        }
+        return main.inventory.containsKey("Wood");
     }
+
     public void handleBoatAndCrafter() {
         if (checkWood()) {
             main.inventory.put("Boat", "Boat");

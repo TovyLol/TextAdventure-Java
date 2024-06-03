@@ -3,26 +3,28 @@ package dcJava.Eindopdracht.source;
 public class GameMap {
     int[][] map;
     String name;
+
     public GameMap(int[][] map, String name) {
         this.map = map;
         this.name = name;
     }
 
-    public int[][] getMap(){
+    public int[][] getMap() {
         return map;
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return map.length;
     }
 
-    public int getWidth(){
+    public int getWidth() {
         return map[0].length;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
+
     public void print(int playerRow, int playerCol) {
         System.out.println(getName() + " Map:");
         for (int i = 0; i < getHeight(); i++) {
@@ -35,6 +37,5 @@ public class GameMap {
             }
             System.out.println();
         }
-
     }
 }
